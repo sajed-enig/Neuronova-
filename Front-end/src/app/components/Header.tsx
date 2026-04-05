@@ -9,7 +9,7 @@ export function Header() {
     <header className="border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-card/80">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm bg-gradient-to-br from-primary to-secondary">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: '#4A9ECA' }}>
             <BookOpen className="w-6 h-6 text-white" />
           </div>
           <span className="text-xl font-bold tracking-tight text-foreground">

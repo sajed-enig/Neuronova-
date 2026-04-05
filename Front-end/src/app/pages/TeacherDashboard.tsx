@@ -1,8 +1,7 @@
-import React from 'react';
 import { Header } from '../components/Header';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { ChartContainer, ChartConfig, ChartTooltip, ChartTooltipContent } from '../components/ui/chart';
-import { Bar, BarChart, CartesianGrid, XAxis, ResponsiveContainer, Line, LineChart, YAxis, Tooltip } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, Line, LineChart } from 'recharts';
 import { Users, BookOpen, CheckCircle, Clock, TrendingUp } from 'lucide-react';
 
 const enrollmentData = [
@@ -42,7 +41,7 @@ export function TeacherDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex justify-between items-end mb-12">
           <div>
@@ -143,11 +142,11 @@ export function TeacherDashboard() {
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="day" />
                   <ChartTooltip content={<ChartTooltipContent />} />
-                  <Line 
-                    type="monotone" 
-                    dataKey="active" 
-                    stroke="var(--color-active)" 
-                    strokeWidth={2} 
+                  <Line
+                    type="monotone"
+                    dataKey="active"
+                    stroke="var(--color-active)"
+                    strokeWidth={2}
                     dot={{ fill: "var(--color-active)" }}
                   />
                 </LineChart>

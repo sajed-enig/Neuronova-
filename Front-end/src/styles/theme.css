@@ -1,44 +1,46 @@
-@custom-variant dark (&:is(.dark *));
+/* Tailwind v4 no longer uses @custom-variant; dark mode is handled via the .dark selector below */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@400;700&family=Poppins:wght@600;700;800&display=swap");
 
 :root {
   --font-size: 16px;
-  --background: #fafbfc;
-  --foreground: #1a2332;
-  --card: #ffffff;
-  --card-foreground: #1a2332;
+  --background: #F8FAFC;
+  --foreground: #1E2937;
+  --card: #FFFFFF;
+  --card-foreground: #1E2937;
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #4a9eca;
+  --primary: #06B6D4;
   --primary-foreground: #ffffff;
-  --secondary: #a8d5ba;
-  --secondary-foreground: #1a2332;
-  --accent: #c5b3e6;
-  --accent-foreground: #1a2332;
+  --secondary: #FF6B6B;
+  --secondary-foreground: #1E2937;
+  --accent: #10B981;
+  --accent-foreground: #ffffff;
   --muted: #e8eef2;
   --muted-foreground: #64748b;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(74, 158, 202, 0.15);
+  --border: #E2E8F0;
   --input: transparent;
-  --input-background: #f3f7fa;
+  --input-background: #F1F5F9;
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #4a9eca;
+  --ring: #06B6D4;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.75rem;
-  --sidebar: #f8fbfd;
-  --sidebar-foreground: #1a2332;
-  --sidebar-primary: #4a9eca;
+  --sidebar: #F8FAFC;
+  --sidebar-foreground: #1E2937;
+  --sidebar-primary: #06B6D4;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #e8f4f8;
-  --sidebar-accent-foreground: #1a2332;
-  --sidebar-border: rgba(74, 158, 202, 0.1);
-  --sidebar-ring: #4a9eca;
+  --sidebar-accent: #E6FAFF;
+  --sidebar-accent-foreground: #1E2937;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #06B6D4;
 
   /* Kid-Friendly Theme Colors */
   --kid-purple: #9b6dff;
@@ -187,6 +189,7 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-ui, "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif);
   }
 
   /**
@@ -238,5 +241,15 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+
+  .font-reading {
+    font-family: var(--font-reading, "Merriweather", Georgia, Cambria, "Times New Roman", Times, serif);
+  }
+  .font-display {
+    font-family: var(--font-display, "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif);
+  }
+  .font-dashboard, .font-nav, .font-quiz {
+    font-family: var(--font-dashboard, "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif);
   }
 }

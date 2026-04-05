@@ -19,7 +19,7 @@ export function CourseCard({ id, title, progress, lastAccessed, description }: C
           </div>
         )}
         
-        <h3 className="mb-2 group-hover:text-primary transition-colors">
+        <h3 className="mb-2 group-hover:text-primary transition-colors font-dashboard">
           {title}
         </h3>
         
@@ -36,7 +36,7 @@ export function CourseCard({ id, title, progress, lastAccessed, description }: C
           </div>
           <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
+              className="h-full bg-primary rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

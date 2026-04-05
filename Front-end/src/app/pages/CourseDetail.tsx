@@ -60,7 +60,7 @@ export function CourseDetail() {
                 </div>
                 <div className="h-3 bg-muted rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
+                    className="h-full bg-primary rounded-full transition-all duration-500"
                     style={{ width: `${course.progress}%` }}
                   />
                 </div>
@@ -93,8 +93,8 @@ export function CourseDetail() {
                     'Apply algebra to real-world problems'
                   ].map((item, index) => (
                     <div key={index} className="flex items-start gap-3 p-4 bg-card rounded-xl border border-border">
-                      <div className="w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 rounded-full bg-secondary" />
+                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-primary" />
                       </div>
                       <span className="text-foreground">{item}</span>
                     </div>
@@ -103,7 +103,7 @@ export function CourseDetail() {
               </div>
               
               {nextLesson && (
-                <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-8 border border-primary/20">
+                <div className="rounded-2xl p-8 border border-border bg-card">
                   <h3 className="mb-3">Continue Learning</h3>
                   <p className="text-muted-foreground mb-6">
                     Pick up where you left off with your next lesson

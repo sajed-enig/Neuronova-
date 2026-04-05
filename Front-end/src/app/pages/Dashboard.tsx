@@ -1,18 +1,10 @@
 import { useState } from 'react';
 import { Header } from '../components/Header';
 import { CourseCard } from '../components/CourseCard';
-import {
-  Rocket,
-  Book,
-  Palette,
-  Brain,
-  Gamepad2,
-  Trophy,
-  Star,
-  Search
-} from 'lucide-react';
+import { Rocket, Book, Palette, Brain, Gamepad2, Search, Trophy, Star } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
+import { LearnerSidebar } from '../components/LearnerSidebar';
 
 // Mock data for demonstration
 const courses = [
@@ -81,7 +73,7 @@ export function Dashboard() {
 
       <div className="flex flex-col lg:flex-row max-w-7xl mx-auto px-4 py-8 gap-8">
 
-        {/* Side Nav */}
+        {/* Side Nav (kept the same) */}
         <aside className="w-full lg:w-64 shrink-0">
           <div className="bg-card rounded-3xl p-6 border border-border sticky top-24">
             <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-foreground">
@@ -119,7 +111,7 @@ export function Dashboard() {
           {/* Welcome Section */}
           <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="text-4xl font-bold mb-3 text-foreground tracking-tight">
+              <h1 className="text-4xl font-bold mb-3 text-foreground tracking-tight font-dashboard">
                 Welcome back, Explorer
               </h1>
               <p className="text-lg text-muted-foreground font-medium">
@@ -139,7 +131,7 @@ export function Dashboard() {
           {/* Featured Adventure */}
           <div className="mb-12 relative overflow-hidden rounded-3xl bg-card border border-border p-8 md:p-10 shadow-sm">
             <div className="relative z-10 max-w-md">
-              <Badge className="bg-primary/10 text-primary border-none mb-4 font-bold text-xs px-3 py-1">New Quest</Badge>
+              <Badge className="bg-secondary/10 text-foreground border-none mb-4 font-semibold text-xs px-3 py-1">New Quest</Badge>
               <h2 className="text-3xl font-bold mb-3 leading-tight">Master the Stars</h2>
               <p className="text-base text-muted-foreground mb-6 font-medium">
                 Our latest space exploration course is live. Join the mission to Mars today.
@@ -173,6 +165,9 @@ export function Dashboard() {
             ))}
           </div>
         </main>
+
+        {/* Learner Right Dashboard */}
+        <LearnerSidebar />
       </div>
     </div>
   );

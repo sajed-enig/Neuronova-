@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { Header } from '../components/Header';
 import { LessonSidebar } from '../components/LessonSidebar';
 import { Button } from '../components/ui/button';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  HelpCircle, 
-  Play, 
-  Music, 
-  FileText, 
+import { Nova, NovaMetrics } from '../nova';
+import {
+  ChevronLeft,
+  ChevronRight,
+  HelpCircle,
+  Play,
+  Music,
+  FileText,
   CheckCircle,
   Trophy,
   ArrowRight
@@ -85,8 +86,9 @@ const lessonContent: Record<string, any> = {
       `
     },
     video: {
-      url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      description: 'Watch this fun video to see how inequalities work in the real world!'
+      type: 'youtube',
+      embedUrl: 'https://www.youtube.com/embed/DrZJKdXlZ3I',
+      description: 'Watch this short lesson to see how inequalities work in the real world.'
     },
     audio: {
       url: 'https://www.w3schools.com/html/horse.mp3',
@@ -117,7 +119,53 @@ export function LessonViewer() {
   const [quizAnswers, setQuizAnswers] = useState<Record<string, any>>({});
   const [showResults, setShowResults] = useState(false);
   const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
-  
+
+  // Nova Metrics state
+  const [metrics, setMetrics] = useState<NovaMetrics>({
+    wrongAnswers: 0,
+    stressLevel: "low",
+    inactiveTime: 0,
+    correctAnswer: false,
+    isReading: true
+  });
+
+  // Sync focusing states with activeFormat
+  useEffect(() => {
+    const isFocusing = ['reading', 'video', 'audio'].includes(activeFormat);
+    setMetrics(prev => ({ ...prev, isReading: isFocusing }));
+  }, [activeFormat]);
+
+  const handleQuizSubmit = (isCorrect: boolean) => {
+    if (isCorrect) {
+      setMetrics(prev => ({ ...prev, correctAnswer: true, wrongAnswers: 0 }));
+      // Reset after a delay so she can go back to normal
+      setTimeout(() => setMetrics(prev => ({ ...prev, correctAnswer: false })), 3000);
+    } else {
+      setMetrics(prev => ({ ...prev, wrongAnswers: prev.wrongAnswers + 1, correctAnswer: false }));
+      // Reset wrongAnswers trigger if needed, or keep it to show she's aware of struggle
+      setTimeout(() => setMetrics(prev => ({ ...prev, wrongAnswers: 0 })), 3000);
+    }
+  };
+
+  // Track inactivity
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setMetrics(prev => ({ ...prev, inactiveTime: prev.inactiveTime + 1 }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Reset inactivity on click/scroll
+  useEffect(() => {
+    const resetInactivity = () => setMetrics(prev => ({ ...prev, inactiveTime: 0 }));
+    window.addEventListener('mousedown', resetInactivity);
+    window.addEventListener('scroll', resetInactivity);
+    return () => {
+      window.removeEventListener('mousedown', resetInactivity);
+      window.removeEventListener('scroll', resetInactivity);
+    };
+  }, []);
+
   const course = courseData[courseId || '1'];
   const lesson = lessonContent[lessonId || 'l4'];
   const currentLessonIndex = course.lessons.findIndex((l: any) => l.id === lessonId);
@@ -134,56 +182,54 @@ export function LessonViewer() {
       </div>
     );
   }
-  
+
   const handleAnswerChange = (questionId: string, value: any) => {
     setQuizAnswers({ ...quizAnswers, [questionId]: value });
   };
-  
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      
+
       <div className="flex flex-1 overflow-hidden">
-        <LessonSidebar 
+        <LessonSidebar
           courseId={courseId || '1'}
           lessons={course.lessons}
           currentLessonId={lessonId}
         />
-        
+
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-4xl mx-auto px-8 py-8">
             {/* Lesson Header */}
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <Link 
+                <Link
                   to={`/course/${courseId}`}
                   className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all"
                 >
                   <ChevronLeft className="w-4 h-4" /> Back to adventures
                 </Link>
                 {isLastLesson && (
-                   <Badge className="bg-primary/10 text-primary border-none font-bold">Final Lesson!</Badge>
+                  <Badge className="bg-primary/10 text-primary border-none font-bold">Final Lesson!</Badge>
                 )}
               </div>
               <h1 className="text-4xl font-bold mb-2 text-foreground">{lesson.title}</h1>
             </div>
-            
+
             {/* Format Selector */}
             <div className="flex flex-wrap gap-2 mb-8 p-1 bg-muted rounded-2xl inline-flex border border-border">
               <button
                 onClick={() => setActiveFormat('reading')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                  activeFormat === 'reading' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeFormat === 'reading' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
+                  }`}
               >
                 <FileText className="w-4 h-4" /> Read
               </button>
               {lesson.video && (
                 <button
                   onClick={() => setActiveFormat('video')}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                    activeFormat === 'video' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
-                  }`}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeFormat === 'video' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
+                    }`}
                 >
                   <Play className="w-4 h-4" /> Watch
                 </button>
@@ -191,27 +237,24 @@ export function LessonViewer() {
               {lesson.audio && (
                 <button
                   onClick={() => setActiveFormat('audio')}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                    activeFormat === 'audio' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
-                  }`}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeFormat === 'audio' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
+                    }`}
                 >
                   <Music className="w-4 h-4" /> Listen
                 </button>
               )}
               <button
                 onClick={() => setActiveFormat('quiz')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                  activeFormat === 'quiz' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
-                }`}
+                className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeFormat === 'quiz' ? 'bg-white shadow-md text-primary' : 'text-muted-foreground hover:text-foreground'
+                  }`}
               >
                 <HelpCircle className="w-4 h-4" /> Quiz
               </button>
               {isLastLesson && (
                 <button
                   onClick={() => setActiveFormat('assignment')}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${
-                    activeFormat === 'assignment' ? 'bg-primary text-white shadow-lg' : 'text-primary hover:bg-primary/5'
-                  }`}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeFormat === 'assignment' ? 'bg-primary text-white shadow-lg' : 'text-primary hover:bg-primary/5'
+                    }`}
                 >
                   <Trophy className="w-4 h-4" /> Final Assignment
                 </button>
@@ -221,8 +264,8 @@ export function LessonViewer() {
             {/* Content Area */}
             <div className="bg-card rounded-3xl p-8 border border-border shadow-sm min-h-[400px] mb-8">
               {activeFormat === 'reading' && (
-                <div 
-                  className="prose prose-slate max-w-none"
+                <div
+                  className="prose prose-slate max-w-none font-reading"
                   dangerouslySetInnerHTML={{ __html: lesson.reading.content }}
                 />
               )}
@@ -230,11 +273,21 @@ export function LessonViewer() {
               {activeFormat === 'video' && (
                 <div className="space-y-6">
                   <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl">
-                    <video 
-                      src={lesson.video.url} 
-                      controls 
-                      className="w-full h-full"
-                    />
+                    {lesson.video?.type === 'youtube' && lesson.video?.embedUrl ? (
+                      <iframe
+                        src={`${lesson.video.embedUrl}?rel=0`}
+                        title="Educational video on inequalities"
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                      />
+                    ) : (
+                      <video
+                        src={lesson.video?.url}
+                        controls
+                        className="w-full h-full"
+                      />
+                    )}
                   </div>
                   <p className="text-lg font-medium text-muted-foreground text-center">
                     {lesson.video.description}
@@ -247,9 +300,9 @@ export function LessonViewer() {
                   <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
                     <Music className="w-12 h-12 text-primary animate-pulse" />
                   </div>
-                  <audio 
-                    src={lesson.audio.url} 
-                    controls 
+                  <audio
+                    src={lesson.audio.url}
+                    controls
                     className="w-full max-w-md"
                   />
                   <p className="text-lg font-medium text-muted-foreground text-center max-w-md">
@@ -257,36 +310,39 @@ export function LessonViewer() {
                   </p>
                 </div>
               )}
-              
+
               {activeFormat === 'quiz' && (
-                <div className="space-y-8">
-                   {lesson.quiz.questions.map((q: any) => (
-                     <div key={q.id} className="space-y-4">
-                        <h3 className="text-xl font-bold">{q.question}</h3>
-                        <div className="grid gap-3">
-                           {q.options.map((opt: string, idx: number) => (
-                             <button 
-                                key={idx}
-                                onClick={() => handleAnswerChange(q.id, idx)}
-                                className={`p-4 rounded-xl border-2 text-left font-medium transition-all ${
-                                  quizAnswers[q.id] === idx ? 'border-primary bg-primary/5 text-primary' : 'border-border hover:border-primary/50'
-                                }`}
-                             >
-                                {opt}
-                             </button>
-                           ))}
-                        </div>
-                     </div>
-                   ))}
-                   <Button onClick={() => setShowResults(true)} className="w-full h-14 rounded-2xl font-bold text-lg">
-                      Submit Quiz
-                   </Button>
-                   {showResults && (
-                     <div className="p-6 bg-green-50 rounded-2xl border-2 border-green-200 text-center">
-                        <CheckCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
-                        <p className="text-green-700 font-bold">Quiz Submitted! You're doing great!</p>
-                     </div>
-                   )}
+                <div className="space-y-8 font-quiz">
+                  {lesson.quiz.questions.map((q: any) => (
+                    <div key={q.id} className="space-y-4">
+                      <h3 className="text-xl font-bold">{q.question}</h3>
+                      <div className="grid gap-3">
+                        {q.options.map((opt: string, idx: number) => (
+                          <button
+                            key={idx}
+                            onClick={() => {
+                              handleAnswerChange(q.id, idx);
+                              const isCorrect = idx === q.correctAnswer;
+                              handleQuizSubmit(isCorrect);
+                            }}
+                            className={`p-4 rounded-xl border-2 text-left font-medium transition-all ${quizAnswers[q.id] === idx ? 'border-primary bg-primary/5 text-primary' : 'border-border hover:border-primary/50'
+                              }`}
+                          >
+                            {opt}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  <Button onClick={() => setShowResults(true)} className="w-full h-14 rounded-2xl font-bold text-lg">
+                    Submit Quiz
+                  </Button>
+                  {showResults && (
+                    <div className="p-6 bg-green-50 rounded-2xl border-2 border-green-200 text-center">
+                      <CheckCircle className="w-10 h-10 text-green-500 mx-auto mb-2" />
+                      <p className="text-green-700 font-bold">Quiz Submitted! You're doing great!</p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -296,12 +352,12 @@ export function LessonViewer() {
                     <h2 className="text-3xl font-bold mb-4">{course.assignment.title}</h2>
                     <p className="text-lg text-muted-foreground">{course.assignment.description}</p>
                   </div>
-                  
+
                   <div className="space-y-6">
                     {course.assignment.tasks.map((task: string, idx: number) => (
                       <div key={idx} className="p-6 rounded-2xl border border-border bg-muted/30">
                         <p className="font-bold mb-4">Task {idx + 1}: {task}</p>
-                        <textarea 
+                        <textarea
                           className="w-full h-32 p-4 rounded-xl border border-border focus:ring-2 focus:ring-primary/20 outline-none resize-none font-medium"
                           placeholder="Write your answer here..."
                         />
@@ -310,8 +366,8 @@ export function LessonViewer() {
                   </div>
 
                   {!assignmentSubmitted ? (
-                    <Button 
-                      onClick={() => setAssignmentSubmitted(true)} 
+                    <Button
+                      onClick={() => setAssignmentSubmitted(true)}
                       className="w-full h-14 rounded-2xl font-bold text-lg"
                     >
                       Turn in Assignment
@@ -336,7 +392,7 @@ export function LessonViewer() {
               >
                 <ChevronLeft className="w-4 h-4" /> Previous Lesson
               </Button>
-              
+
               {!isLastLesson ? (
                 <Button
                   className="flex items-center gap-2 font-bold px-8 h-12 rounded-xl shadow-lg"
@@ -355,6 +411,12 @@ export function LessonViewer() {
           </div>
         </main>
       </div>
+
+      {/* Nova Mascot System */}
+      <Nova
+        key={lessonId || 'l4'}
+        metrics={metrics}
+      />
     </div>
   );
 }

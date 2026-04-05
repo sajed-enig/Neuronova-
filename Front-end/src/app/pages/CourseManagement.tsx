@@ -1,26 +1,25 @@
-import React from 'react';
 import { Header } from '../components/Header';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
-import { 
-  Search, 
-  MoreVertical, 
-  Edit, 
-  Trash2, 
-  BarChart2, 
-  Plus, 
-  Users, 
-  BookOpen, 
+import {
+  Search,
+  MoreVertical,
+  Edit,
+  Trash2,
+  BarChart2,
+  Plus,
+  Users,
+  BookOpen,
   ChevronRight,
   ExternalLink,
   Settings
 } from 'lucide-react';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from '../components/ui/dropdown-menu';
@@ -77,7 +76,7 @@ export function CourseManagement() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
           <div>
@@ -143,22 +142,22 @@ export function CourseManagement() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="hidden sm:flex gap-2"
                       onClick={() => window.location.href = `/teacher/analytics/${course.id}`}
                     >
                       <BarChart2 className="w-4 h-4" /> Analytics
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       className="hidden sm:flex gap-2"
                     >
                       <Edit className="w-4 h-4" /> Edit
                     </Button>
-                    
+
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
@@ -184,7 +183,7 @@ export function CourseManagement() {
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    
+
                     <Button variant="ghost" size="icon" className="group-hover:translate-x-1 transition-transform">
                       <ChevronRight className="w-4 h-4" />
                     </Button>

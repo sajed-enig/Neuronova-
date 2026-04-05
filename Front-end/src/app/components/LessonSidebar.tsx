@@ -16,7 +16,7 @@ interface LessonSidebarProps {
 
 export function LessonSidebar({ courseId, lessons, currentLessonId }: LessonSidebarProps) {
   return (
-    <div className="w-80 bg-sidebar border-r border-sidebar-border overflow-y-auto">
+    <div className="w-80 bg-sidebar border-r border-sidebar-border overflow-y-auto font-dashboard">
       <div className="p-6">
         <h2 className="mb-6 text-sidebar-foreground">Course Content</h2>
         
@@ -32,13 +32,13 @@ export function LessonSidebar({ courseId, lessons, currentLessonId }: LessonSide
               >
                 <div className={`
                   flex items-start gap-3 p-4 rounded-xl transition-all duration-200
-                  ${isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground shadow-sm' : 'hover:bg-sidebar-accent/50'}
+                  ${isActive ? 'bg-primary/10 text-primary font-bold shadow-sm' : 'hover:bg-sidebar-accent/50'}
                   ${lesson.locked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}>
                   <div className="flex-shrink-0 mt-0.5">
                     {lesson.completed ? (
-                      <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center">
-                        <Check className="w-4 h-4 text-secondary-foreground" />
+                      <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                        <Check className="w-4 h-4 text-white" />
                       </div>
                     ) : lesson.locked ? (
                       <Lock className="w-5 h-5 text-muted-foreground" />
